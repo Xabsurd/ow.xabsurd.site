@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Nuxt / build output
+.nuxt/
+.output/
+dist/
+
+# Runtime data, caches, and reports
+.data/
+.cache/
+.nitro/
+.nuxt-local-logs/
+coverage/
+*.log
+
+# Environment and deployment secrets
+.env*
+!.env.example
+!.env.deploy.example
+
+# Local databases and dumps
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.sql.gz
+
+# Private keys and certificates
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+
+# Editor and OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local planning notes generated during development
+codex-*.md

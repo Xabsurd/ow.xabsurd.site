@@ -1,0 +1,50 @@
+{
+  "name": "overwatch-workshop-hub",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "postinstall": "nuxt prepare && prisma generate",
+    "db:generate": "prisma generate",
+    "db:init:local": "tsx scripts/init-local-db.ts",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:seed:prod": "node prisma/seed.mjs",
+    "cache:maps": "node scripts/cache-map-images.mjs",
+    "import:genji": "tsx scripts/import-genji-maps.ts",
+    "test": "vitest run",
+    "deploy": "tsx scripts/deploy.ts"
+  },
+  "dependencies": {
+    "@iconify/vue": "^5.0.1",
+    "@nuxtjs/color-mode": "^4.0.0",
+    "@nuxtjs/i18n": "^10.4.0",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "markdown-it": "^14.2.0",
+    "nodemailer": "^8.0.10",
+    "nuxt": "^4.4.7",
+    "pg": "^8.21.0",
+    "sanitize-html": "^2.17.4",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.15.2",
+    "@types/markdown-it": "^14.1.2",
+    "@types/nodemailer": "^8.0.0",
+    "@types/sanitize-html": "^2.16.1",
+    "eslint": "^10.4.1",
+    "prettier": "^3.8.3",
+    "prisma": "^7.8.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
+  }
+}

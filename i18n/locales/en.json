@@ -8,6 +8,13 @@
     "upload": "Upload", 
     "admin": "Admin"
   },
+  "parkourHeroes": {
+    "genji": "Genji parkour",
+    "kiriko": "Kiriko parkour",
+    "doomfist": "Doomfist parkour",
+    "lucio": "Lucio parkour",
+    "other": "Other hero parkour"
+  },
   "hero": {
     "title": "Collect, share, and discover Overwatch Workshop codes.",
     "description": "A searchable, moderated, low-bandwidth community hub with a dedicated Genji parkour area."
@@ -68,6 +75,9 @@
     "allTypes": "All types",
     "allDifficulties": "All difficulties",
     "allMaps": "All maps",
+    "allHeroes": "All heroes",
+    "parkourHero": "Parkour hero",
+    "any": "Any",
     "sort": "Sort"
   },
   "sort": {
@@ -92,6 +102,8 @@
     "viewCount": "{count} views",
     "favoriteCount": "{count} favorites",
     "levels": "{count} levels",
+    "yes": "Yes",
+    "no": "No",
     "unknown": "Unknown",
     "viewSameMap": "View same map",
     "favorite": "Favorite",

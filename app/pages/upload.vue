@@ -22,7 +22,6 @@ type CodeFormValue = {
   parkour: {
     hero: string
     levelCount: number
-    difficultyStart: string
     timerSupported: boolean
     beginnerFriendly: boolean
     averageClearTime: string

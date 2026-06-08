@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { codeTypes, parkourHeroes, workshopTags } from '~/utils/catalog'
+import { codeTypes, localizedCodeType, parkourHeroes, workshopTags } from '~/utils/catalog'
 import FormSelectPicker from '~/components/form/SelectPicker.vue'
 
 const query = defineModel<Record<string, string>>({ default: {} })
-withDefaults(defineProps<{ showType?: boolean; compact?: boolean }>(), {
+const props = withDefaults(defineProps<{ showType?: boolean; compact?: boolean }>(), {
   showType: true,
   compact: false
 })
-const { t } = useI18n()
+const { locale, t } = useI18n()
 const types = codeTypes
 const typeOptions = computed(() => [
   { value: '', label: t('filters.allTypes') },
-  ...types.map((type) => ({ value: type, label: type }))
+  ...types.map((type) => ({ value: type, label: localizedCodeType(type, locale.value) }))
 ])
 const sortOptions = computed(() => [
   { value: 'latest', label: t('sort.latest') },
@@ -21,23 +21,27 @@ const sortOptions = computed(() => [
 ])
 const isParkour = computed(() => query.value.type === '跑酷')
 const heroOptions = computed(() => [
-  { value: '', label: '全部角色' },
-  ...parkourHeroes.map((hero) => ({ value: hero.value, label: hero.label }))
+  { value: '', label: t('filters.allHeroes') },
+  ...parkourHeroes.map((hero) => ({ value: hero.value, label: t(`parkourHeroes.${hero.value}`) }))
 ])
-const booleanOptions = [
-  { value: '', label: '不限' },
-  { value: 'true', label: '是' },
-  { value: 'false', label: '否' }
-]
+const booleanOptions = computed(() => [
+  { value: '', label: t('filters.any') },
+  { value: 'true', label: t('ui.yes') },
+  { value: 'false', label: t('ui.no') }
+])
+const mainGridClass = computed(() => [
+  'grid grid-cols-2 items-end gap-3 sm:grid-cols-4',
+  props.showType ? 'lg:grid-cols-[minmax(12rem,1fr)_11rem_11rem_11rem]' : 'lg:grid-cols-[minmax(12rem,1fr)_11rem_11rem]'
+])
 watch(isParkour, (enabled) => {
   if (enabled) return
+  query.value.difficulty = ''
   query.value.hero = ''
-  query.value.difficultyStart = ''
   query.value.levelMin = ''
   query.value.levelMax = ''
   query.value.timerSupported = ''
   query.value.beginnerFriendly = ''
-})
+}, { immediate: true })
 const tagFetch = useFetch('/api/tags')
 const tagData = tagFetch.data
 const tagColor = new Map(workshopTags.map((tag) => [tag.name, tag.color]))
@@ -69,7 +73,6 @@ function reset() {
   query.value.difficulty = ''
   query.value.mapName = ''
   query.value.hero = ''
-  query.value.difficultyStart = ''
   query.value.levelMin = ''
   query.value.levelMax = ''
   query.value.timerSupported = ''
@@ -92,13 +95,12 @@ await tagFetch
         {{ t('ui.reset') }}
       </UiActionButton>
     </div>
-    <div class="grid grid-cols-2 items-end gap-3 sm:grid-cols-4 lg:grid-cols-[minmax(12rem,1fr)_11rem_11rem_11rem_11rem]">
+    <div :class="mainGridClass">
       <div class="col-span-2 sm:col-span-4 lg:col-span-1">
         <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ t('filters.search') }}</span>
         <CodeSearchBox v-model="query.keyword" />
       </div>
       <FormSelectPicker v-if="showType" v-model="query.type" :label="t('forms.type')" :placeholder="t('filters.allTypes')" :options="typeOptions" />
-      <FormDifficultyPicker v-model="query.difficulty" allow-empty :empty-label="t('filters.allDifficulties')" />
       <FormMapPicker v-model="query.mapName" allow-empty :empty-label="t('filters.allMaps')" />
       <FormSelectPicker v-model="query.sort" :label="t('filters.sort')" :placeholder="t('sort.latest')" :options="sortOptions" />
     </div>
@@ -107,8 +109,8 @@ await tagFetch
       <FormTagInput v-model="tagModel" :available-tags="tags" :allow-custom="false" />
     </div>
     <div v-if="isParkour" class="mt-4 grid grid-cols-2 items-end gap-3 sm:grid-cols-3 lg:grid-cols-4">
-      <FormSelectPicker v-model="query.hero" label="跑酷角色" placeholder="全部角色" :options="heroOptions" />
-      <FormDifficultyPicker v-model="query.difficultyStart" allow-empty empty-label="起始难度" />
+      <FormSelectPicker v-model="query.hero" :label="t('filters.parkourHero')" :placeholder="t('filters.allHeroes')" :options="heroOptions" />
+      <FormDifficultyPicker v-model="query.difficulty" allow-empty :empty-label="t('filters.allDifficulties')" />
       <!-- <label>
         <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">最少关卡</span>
         <input v-model="query.levelMin" inputmode="numeric" class="h-11 w-full rounded-xl border border-white/45 bg-white/35 px-3 text-sm shadow-sm backdrop-blur transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15">
@@ -117,8 +119,8 @@ await tagFetch
         <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">最多关卡</span>
         <input v-model="query.levelMax" inputmode="numeric" class="h-11 w-full rounded-xl border border-white/45 bg-white/35 px-3 text-sm shadow-sm backdrop-blur transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15">
       </label> -->
-      <FormSelectPicker v-model="query.timerSupported" label="支持计时" placeholder="不限" :options="booleanOptions" />
-      <FormSelectPicker v-model="query.beginnerFriendly" label="适合新手" placeholder="不限" :options="booleanOptions" />
+      <FormSelectPicker v-model="query.timerSupported" :label="t('forms.timerSupported')" :placeholder="t('filters.any')" :options="booleanOptions" />
+      <FormSelectPicker v-model="query.beginnerFriendly" :label="t('forms.beginnerFriendly')" :placeholder="t('filters.any')" :options="booleanOptions" />
     </div>
   </UiSurface>
 </template>

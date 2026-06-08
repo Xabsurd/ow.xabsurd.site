@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { parkourHeroes } from '~/utils/catalog'
+
 const { t } = useI18n()
 const route = useRoute()
 const state = reactive({
@@ -7,7 +9,6 @@ const state = reactive({
   difficulty: String(route.query.difficulty || ''),
   mapName: String(route.query.mapName || ''),
   hero: String(route.query.hero || ''),
-  difficultyStart: String(route.query.difficultyStart || ''),
   levelMin: String(route.query.levelMin || ''),
   levelMax: String(route.query.levelMax || ''),
   timerSupported: String(route.query.timerSupported || ''),
@@ -29,7 +30,6 @@ function syncStateFromRoute() {
   state.difficulty = queryStringValue(route.query.difficulty)
   state.mapName = queryStringValue(route.query.mapName)
   state.hero = queryStringValue(route.query.hero)
-  state.difficultyStart = queryStringValue(route.query.difficultyStart)
   state.levelMin = queryStringValue(route.query.levelMin)
   state.levelMax = queryStringValue(route.query.levelMax)
   state.timerSupported = queryStringValue(route.query.timerSupported)
@@ -60,7 +60,7 @@ watch(
 )
 
 watch(
-  () => [state.hero, state.difficultyStart, state.levelMin, state.levelMax, state.timerSupported, state.beginnerFriendly],
+  () => [state.hero, state.levelMin, state.levelMax, state.timerSupported, state.beginnerFriendly],
   () => {
     if (syncingFromRoute) return
     page.value = 1
@@ -78,6 +78,14 @@ useSeoMeta({ title: () => `${t('nav.codes')} · ${t('brand')}`, description: () 
 
 const { data, pending, refresh } = await useFetch('/api/codes', { query, watch: false })
 refreshCodes = refresh
+const quickParkourHeroes = ['doomfist', 'kiriko', 'genji']
+const quickParkourLinks = computed(() => quickParkourHeroes
+  .map((heroValue) => parkourHeroes.find((hero) => hero.value === heroValue))
+  .filter(Boolean)
+  .map((hero) => ({
+    to: `/codes?type=${encodeURIComponent('跑酷')}&hero=${hero!.value}`,
+    label: t(`parkourHeroes.${hero!.value}`)
+  })))
 </script>
 
 <template>
@@ -91,7 +99,15 @@ refreshCodes = refresh
           </p>
         </div>
         <div class="flex flex-wrap gap-2">
-          <UiActionLink to="/codes?type=跑酷&hero=genji" variant="primary" class="h-12 px-4">{{ t('nav.genjiPk') }}</UiActionLink>
+          <UiActionLink
+            v-for="item in quickParkourLinks"
+            :key="item.to"
+            :to="item.to"
+            variant="primary"
+            class="h-12 px-4"
+          >
+            {{ item.label }}
+          </UiActionLink>
           <UiActionLink to="/upload" variant="primary" class="h-12 px-4">{{ t('nav.upload') }}</UiActionLink>
         </div>
       </div>

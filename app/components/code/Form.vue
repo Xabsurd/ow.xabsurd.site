@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { codeTypes, parkourHeroes } from '~/utils/catalog'
+import { codeTypes, localizedCodeType, parkourHeroes } from '~/utils/catalog'
 
 type CodeFormValue = {
   workshopCode: string
@@ -17,7 +17,6 @@ type CodeFormValue = {
   parkour: {
     hero: string
     levelCount: number
-    difficultyStart: string
     timerSupported: boolean
     beginnerFriendly: boolean
     averageClearTime: string
@@ -34,7 +33,7 @@ const props = withDefaults(defineProps<{
   busy: false
 })
 const emit = defineEmits<{ submit: [value: CodeFormValue] }>()
-const { t } = useI18n()
+const { locale, t } = useI18n()
 const levelInputClass = controlClasses()
 
 function defaults(): CodeFormValue {
@@ -54,7 +53,6 @@ function defaults(): CodeFormValue {
     parkour: {
       hero: 'genji',
       levelCount: 1,
-      difficultyStart: '',
       timerSupported: false,
       beginnerFriendly: false,
       averageClearTime: '',
@@ -64,8 +62,9 @@ function defaults(): CodeFormValue {
 }
 
 const form = reactive<CodeFormValue>(defaults())
-const typeOptions = computed(() => codeTypes.map((item) => ({ value: item, label: item })))
-const heroOptions = computed(() => parkourHeroes.map((hero) => ({ value: hero.value, label: hero.label })))
+const typeOptions = computed(() => codeTypes.map((item) => ({ value: item, label: localizedCodeType(item, locale.value) })))
+const heroOptions = computed(() => parkourHeroes.map((hero) => ({ value: hero.value, label: t(`parkourHeroes.${hero.value}`) })))
+const isParkour = computed(() => form.type === '跑酷')
 
 function applyInitial(value: Partial<CodeFormValue>) {
   const next = { ...value }
@@ -93,7 +92,9 @@ watch(
 )
 
 function submit() {
-  emit('submit', JSON.parse(JSON.stringify(form)))
+  const value = JSON.parse(JSON.stringify(form)) as CodeFormValue
+  if (value.type !== '跑酷') value.difficulty = defaults().difficulty
+  emit('submit', value)
 }
 </script>
 
@@ -103,11 +104,10 @@ function submit() {
       <FormInput v-model="form.workshopCode" :label="t('forms.workshopCode')" required />
       <FormInput v-model="form.title" :label="t('forms.title')" required />
       <FormSelectPicker v-model="form.type" :label="t('forms.type')" :placeholder="t('forms.type')" :options="typeOptions" />
-      <FormDifficultyPicker v-model="form.difficulty" />
       <FormMapPicker v-model="form.mapName" />
       <FormInput v-model="form.authorName" :label="t('forms.authorName')" />
       <FormInput v-model="form.version" :label="t('forms.version')" />
-      <FormInput v-model="form.playerCount" :label="t('forms.playerCount')" />
+      <FormInput v-model="form.playerCount" :label="t('forms.playerCount')" class="sm:col-span-2" />
     </div>
 
     <FormTextarea v-model="form.description" :label="t('forms.description')" required />
@@ -115,12 +115,12 @@ function submit() {
       <FormTagInput v-model="form.tags" class="mt-1" />
     </FormField>
 
-    <FormSection v-if="form.type === '跑酷'" class="sm:grid-cols-2">
-      <FormSelectPicker v-model="form.parkour.hero" label="跑酷角色" placeholder="跑酷角色" :options="heroOptions" />
+    <FormSection v-if="isParkour" class="sm:grid-cols-2">
+      <FormSelectPicker v-model="form.parkour.hero" :label="t('filters.parkourHero')" :placeholder="t('filters.parkourHero')" :options="heroOptions" />
+      <FormDifficultyPicker v-model="form.difficulty" />
       <FormField :label="t('forms.levelCount')">
         <input v-model.number="form.parkour.levelCount" type="number" min="1" :class="['mt-1 w-full', levelInputClass]">
       </FormField>
-      <FormDifficultyPicker v-model="form.parkour.difficultyStart" allow-empty label="起始难度" empty-label="起始难度" />
       <FormInput v-model="form.parkour.averageClearTime" :label="t('forms.averageClearTime')" />
       <FormCheckbox v-model="form.parkour.timerSupported" :label="t('forms.timerSupported')" />
       <FormCheckbox v-model="form.parkour.beginnerFriendly" :label="t('forms.beginnerFriendly')" />

@@ -25,6 +25,7 @@ const mapLabel = computed(() => map.value ? localizedMapName(map.value, locale.v
 const typeLabel = computed(() => localizedCodeType(props.item.type, locale.value))
 const levelLabel = computed(() => t('ui.levels', { count: props.item.parkour?.levelCount || 0 }))
 const heroLabel = computed(() => parkourHeroLabel(props.item.parkour?.hero))
+const isParkour = computed(() => props.item.type === '跑酷' || Boolean(props.item.parkour))
 </script>
 
 <template>
@@ -49,7 +50,7 @@ const heroLabel = computed(() => parkourHeroLabel(props.item.parkour?.hero))
         </div>
 
         <div class="mt-3 flex flex-wrap gap-1.5">
-          <UiDifficultyBadge :value="item.difficulty" />
+          <UiDifficultyBadge v-if="isParkour" :value="item.difficulty" />
           <UiTagPill v-if="heroLabel" :label="heroLabel" />
           <UiTagPill v-if="item.parkour?.levelCount" :label="levelLabel" />
           <UiTagPill v-for="entry in (item.tags || []).slice(0, 4)" :key="entry.tag.slug" :label="entry.tag.name" />

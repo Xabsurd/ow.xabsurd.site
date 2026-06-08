@@ -74,7 +74,10 @@ async function reject() {
               <span class="font-medium">{{ item.uploader.gameId }}</span>
               <span class="block text-xs text-slate-500">{{ item.uploader.email }}</span>
             </td>
-            <td class="p-3"><UiDifficultyBadge :value="item.difficulty" /></td>
+            <td class="p-3">
+              <UiDifficultyBadge v-if="item.type === '跑酷'" :value="item.difficulty" />
+              <span v-else class="text-slate-400">-</span>
+            </td>
             <td class="p-3 text-right">
               <NuxtLink :to="`/profile/${item.uploader.id}`" class="mr-2 inline-flex rounded-lg border border-white/45 bg-white/35 px-3 py-2 text-sm font-semibold dark:border-white/10 dark:bg-white/10">{{ t('admin.uploader') }}</NuxtLink>
               <button class="rounded-lg bg-emerald-600 px-3 py-2 text-white disabled:opacity-50" :disabled="busyId === item.id" @click="approve(item.id)">{{ t('admin.approve') }}</button>

@@ -8,6 +8,13 @@
     "upload": "上传",
     "admin": "后台"
   },
+  "parkourHeroes": {
+    "genji": "源氏跑酷",
+    "kiriko": "雾子跑酷",
+    "doomfist": "铁拳跑酷",
+    "lucio": "卢西奥跑酷",
+    "other": "其他英雄跑酷"
+  },
   "hero": {
     "title": "收集、分享和发现好玩的守望先锋工坊代码。",
     "description": "低带宽、可搜索、带审核的社区工坊代码库，专门保留源氏跑酷专区。"
@@ -68,6 +75,9 @@
     "allTypes": "全部类型",
     "allDifficulties": "全部难度",
     "allMaps": "全部地图",
+    "allHeroes": "全部角色",
+    "parkourHero": "跑酷角色",
+    "any": "不限",
     "sort": "排序"
   },
   "sort": {
@@ -92,6 +102,8 @@
     "viewCount": "{count} 浏览",
     "favoriteCount": "{count} 收藏",
     "levels": "{count} 关",
+    "yes": "是",
+    "no": "否",
     "unknown": "未知",
     "viewSameMap": "查看同地图",
     "favorite": "收藏",

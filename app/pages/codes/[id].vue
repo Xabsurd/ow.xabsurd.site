@@ -32,7 +32,6 @@ type CodeDetail = {
       levelCount: number
       timerSupported: boolean
       beginnerFriendly: boolean
-      difficultyStart?: string | null
       averageClearTime?: string | null
     } | null
   }
@@ -47,6 +46,7 @@ const mapModeLabel = computed(() => map.value ? localizedMapMode(map.value, loca
 const typeLabel = computed(() => localizedCodeType(data.value?.code.type, locale.value))
 const levelLabel = computed(() => t('ui.levels', { count: data.value?.code.parkour?.levelCount || 0 }))
 const heroLabel = computed(() => parkourHeroLabel(data.value?.code.parkour?.hero))
+const isParkour = computed(() => data.value?.code.type === '跑酷' || Boolean(data.value?.code.parkour))
 const sameMapQuery = computed(() => ({ path: '/codes', query: { mapName: data.value?.code.mapName || '' } }))
 const favoriteBusy = ref(false)
 const reportOpen = ref(false)
@@ -146,7 +146,7 @@ async function submitReport() {
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
           <div class="absolute bottom-0 left-0 right-0 p-5 text-white sm:p-6">
             <div class="mb-3 flex flex-wrap gap-2">
-              <UiDifficultyBadge :value="data.code.difficulty" />
+              <UiDifficultyBadge v-if="isParkour" :value="data.code.difficulty" />
               <UiTagPill :label="typeLabel" />
               <UiTagPill v-if="heroLabel" :label="heroLabel" />
               <UiTagPill v-if="data.code.parkour" :label="levelLabel" />
@@ -225,7 +225,6 @@ async function submitReport() {
           <div class="grid gap-3">
             <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>角色</span><b>{{ heroLabel || '-' }}</b></div>
             <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.levelCount') }}</span><b>{{ data.code.parkour.levelCount }}</b></div>
-            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>起始难度</span><b>{{ data.code.parkour.difficultyStart || '-' }}</b></div>
             <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.timerSupported') }}</span><b>{{ data.code.parkour.timerSupported ? 'Yes' : 'No' }}</b></div>
             <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.beginnerFriendly') }}</span><b>{{ data.code.parkour.beginnerFriendly ? 'Yes' : 'No' }}</b></div>
             <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.averageClearTime') }}</span><b>{{ data.code.parkour.averageClearTime || '-' }}</b></div>

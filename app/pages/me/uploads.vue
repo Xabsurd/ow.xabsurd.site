@@ -103,7 +103,10 @@ async function remove(item: UploadItem) {
               </td>
               <td class="px-4 py-3"><code class="rounded bg-slate-950 px-2 py-1 font-bold text-white dark:bg-white dark:text-slate-950">{{ item.workshopCode }}</code></td>
               <td class="px-4 py-3"><UiTagPill :label="item.type" /></td>
-              <td class="px-4 py-3"><UiDifficultyBadge :value="item.difficulty" /></td>
+              <td class="px-4 py-3">
+                <UiDifficultyBadge v-if="item.type === '跑酷'" :value="item.difficulty" />
+                <span v-else class="text-slate-400">-</span>
+              </td>
               <td class="px-4 py-3"><StatusBadge :status="item.status" /></td>
               <td class="max-w-80 px-4 py-3 text-slate-500"><span class="line-clamp-1">{{ item.reviewNote || '-' }}</span></td>
               <td class="px-4 py-3 text-right">

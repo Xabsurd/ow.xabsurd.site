@@ -21,6 +21,18 @@ export const legacyDifficultyOptions = ['入门', '简单', '普通', '困难', 
 
 export const codeTypes = ['娱乐', '竞技', '训练', '跑酷', 'PVE', 'PVP', '小游戏', '工具', '其他'] as const
 
+export const parkourHeroes = [
+  { value: 'genji', label: '源氏跑酷', shortLabel: '源氏' },
+  { value: 'kiriko', label: '雾子跑酷', shortLabel: '雾子' },
+  { value: 'doomfist', label: '铁拳跑酷', shortLabel: '铁拳' },
+  { value: 'lucio', label: '卢西奥跑酷', shortLabel: '卢西奥' },
+  { value: 'other', label: '其他英雄跑酷', shortLabel: '其他' }
+] as const
+
+export function parkourHeroLabel(value?: string | null) {
+  return parkourHeroes.find((hero) => hero.value === value)?.shortLabel || value || ''
+}
+
 export const codeTypeLabels: Record<string, { zh: string; en: string }> = {
   娱乐: { zh: '娱乐', en: 'Fun' },
   竞技: { zh: '竞技', en: 'Competitive' },

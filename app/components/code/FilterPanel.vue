@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { codeTypes, workshopTags } from '~/utils/catalog'
+import { codeTypes, parkourHeroes, workshopTags } from '~/utils/catalog'
 import FormSelectPicker from '~/components/form/SelectPicker.vue'
 
 const query = defineModel<Record<string, string>>({ default: {} })
@@ -19,6 +19,25 @@ const sortOptions = computed(() => [
   { value: 'favorites', label: t('sort.favorites') },
   { value: 'views', label: t('sort.views') }
 ])
+const isParkour = computed(() => query.value.type === '跑酷')
+const heroOptions = computed(() => [
+  { value: '', label: '全部角色' },
+  ...parkourHeroes.map((hero) => ({ value: hero.value, label: hero.label }))
+])
+const booleanOptions = [
+  { value: '', label: '不限' },
+  { value: 'true', label: '是' },
+  { value: 'false', label: '否' }
+]
+watch(isParkour, (enabled) => {
+  if (enabled) return
+  query.value.hero = ''
+  query.value.difficultyStart = ''
+  query.value.levelMin = ''
+  query.value.levelMax = ''
+  query.value.timerSupported = ''
+  query.value.beginnerFriendly = ''
+})
 const tagFetch = useFetch('/api/tags')
 const tagData = tagFetch.data
 const tagColor = new Map(workshopTags.map((tag) => [tag.name, tag.color]))
@@ -49,6 +68,12 @@ function reset() {
   query.value.type = ''
   query.value.difficulty = ''
   query.value.mapName = ''
+  query.value.hero = ''
+  query.value.difficultyStart = ''
+  query.value.levelMin = ''
+  query.value.levelMax = ''
+  query.value.timerSupported = ''
+  query.value.beginnerFriendly = ''
   query.value.tags = ''
   query.value.sort = 'latest'
 }
@@ -57,15 +82,15 @@ await tagFetch
 </script>
 
 <template>
-  <form class="rounded-2xl border border-white/45 bg-white/40 p-4 shadow-xl shadow-slate-950/5 backdrop-blur-md dark:border-white/10 dark:bg-white/10" @submit.prevent>
+  <UiSurface as="form" class="p-4" @submit.prevent>
     <div v-if="!compact" class="mb-4 flex items-center justify-between gap-3">
       <div>
-        <h2 class="text-lg font-semibold">{{ t('filters.title') }}</h2>
-        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">{{ t('filters.hint') }}</p>
+        <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-50">{{ t('filters.title') }}</h2>
+        <p class="mt-1 text-xs text-slate-500/90 dark:text-slate-400">{{ t('filters.hint') }}</p>
       </div>
-      <button type="button" class="h-9 rounded-xl border border-white/45 bg-white/35 px-3 text-xs font-semibold shadow-sm backdrop-blur transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15" @click="reset">
+      <UiActionButton size="compact" class="h-9 text-xs" @click="reset">
         {{ t('ui.reset') }}
-      </button>
+      </UiActionButton>
     </div>
     <div class="grid grid-cols-2 items-end gap-3 sm:grid-cols-4 lg:grid-cols-[minmax(12rem,1fr)_11rem_11rem_11rem_11rem]">
       <div class="col-span-2 sm:col-span-4 lg:col-span-1">
@@ -81,5 +106,19 @@ await tagFetch
       <span class="mb-2 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ t('forms.tags') }}</span>
       <FormTagInput v-model="tagModel" :available-tags="tags" :allow-custom="false" />
     </div>
-  </form>
+    <div v-if="isParkour" class="mt-4 grid grid-cols-2 items-end gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      <FormSelectPicker v-model="query.hero" label="跑酷角色" placeholder="全部角色" :options="heroOptions" />
+      <FormDifficultyPicker v-model="query.difficultyStart" allow-empty empty-label="起始难度" />
+      <!-- <label>
+        <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">最少关卡</span>
+        <input v-model="query.levelMin" inputmode="numeric" class="h-11 w-full rounded-xl border border-white/45 bg-white/35 px-3 text-sm shadow-sm backdrop-blur transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15">
+      </label>
+      <label>
+        <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">最多关卡</span>
+        <input v-model="query.levelMax" inputmode="numeric" class="h-11 w-full rounded-xl border border-white/45 bg-white/35 px-3 text-sm shadow-sm backdrop-blur transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15">
+      </label> -->
+      <FormSelectPicker v-model="query.timerSupported" label="支持计时" placeholder="不限" :options="booleanOptions" />
+      <FormSelectPicker v-model="query.beginnerFriendly" label="适合新手" placeholder="不限" :options="booleanOptions" />
+    </div>
+  </UiSurface>
 </template>

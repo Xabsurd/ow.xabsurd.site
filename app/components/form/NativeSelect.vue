@@ -11,6 +11,7 @@ defineProps<{
   options: Option[]
 }>()
 const model = defineModel<string>({ default: '' })
+const selectClass = controlClasses({ select: true })
 </script>
 
 <template>
@@ -19,7 +20,7 @@ const model = defineModel<string>({ default: '' })
     <span class="relative block">
       <select
         v-model="model"
-        class="focus-ring h-12 w-full appearance-none rounded-xl border border-white/45 bg-white/35 px-4 pr-10 text-sm font-semibold shadow-lg shadow-slate-950/5 backdrop-blur-xl transition-colors hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15"
+        :class="['w-full', selectClass]"
       >
         <option v-for="item in options" :key="item.value" :value="item.value">
           {{ item.label }}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { codeTypes } from '~/utils/catalog'
+import { codeTypes, parkourHeroes } from '~/utils/catalog'
 
 definePageMeta({ middleware: 'auth' })
 const { t } = useI18n()
@@ -17,11 +17,22 @@ const form = reactive({
   version: '',
   region: 'Global',
   playerCount: '',
-  language: 'zh-CN'
+  language: 'zh-CN',
+  parkour: {
+    hero: 'genji',
+    levelCount: 1,
+    difficultyStart: '',
+    timerSupported: false,
+    beginnerFriendly: false,
+    averageClearTime: '',
+    notes: ''
+  }
 })
 const submitting = ref(false)
 const types = codeTypes
 const typeOptions = computed(() => types.map((item) => ({ value: item, label: item })))
+const heroOptions = computed(() => parkourHeroes.map((hero) => ({ value: hero.value, label: hero.label })))
+const levelInputClass = controlClasses()
 
 watch(
   () => form.workshopCode,
@@ -36,6 +47,7 @@ function clientError() {
   if (form.title.trim().length < 2) return t('validation.titleTooShort')
   if (form.description.trim().length < 10) return t('validation.descriptionTooShort')
   if (!form.mapName) return t('validation.mapRequired')
+  if (form.type === '跑酷' && (!form.parkour.levelCount || form.parkour.levelCount < 1)) return t('validation.levelCountRequired')
   return ''
 }
 
@@ -47,7 +59,8 @@ async function submit() {
   }
   submitting.value = true
   try {
-    await $fetch('/api/codes', { method: 'POST', body: form })
+    const body = form.type === '跑酷' ? form : { ...form, parkour: undefined }
+    await $fetch('/api/codes', { method: 'POST', body })
     toast.success(t('pages.uploadSuccess'))
     await router.push('/me/uploads')
   } catch (err: unknown) {
@@ -75,12 +88,20 @@ async function submit() {
           <FormInput v-model="form.playerCount" :label="t('forms.playerCount')" />
         </div>
         <div><span class="text-sm font-medium">{{ t('forms.tags') }}</span><FormTagInput v-model="form.tags" class="mt-1" /></div>
-        <button
-          class="h-12 rounded-xl border border-cyan-300/40 bg-cyan-300/18 px-5 text-sm font-semibold text-cyan-950 shadow-lg shadow-cyan-500/10 backdrop-blur-xl transition hover:bg-cyan-300/28 disabled:cursor-not-allowed disabled:opacity-60 dark:text-cyan-50"
-          :disabled="submitting"
-        >
+        <UiSurface v-if="form.type === '跑酷'" variant="subtle" class="grid gap-4 p-4 sm:grid-cols-2">
+          <FormSelectPicker v-model="form.parkour.hero" label="跑酷角色" placeholder="跑酷角色" :options="heroOptions" />
+          <label>
+            <span class="text-sm font-medium">{{ t('forms.levelCount') }}</span>
+            <input v-model.number="form.parkour.levelCount" type="number" min="1" :class="['mt-1 w-full', levelInputClass]">
+          </label>
+          <FormDifficultyPicker v-model="form.parkour.difficultyStart" allow-empty empty-label="起始难度" />
+          <FormInput v-model="form.parkour.averageClearTime" :label="t('forms.averageClearTime')" />
+          <label class="flex items-center gap-2 text-sm"><input v-model="form.parkour.timerSupported" type="checkbox">{{ t('forms.timerSupported') }}</label>
+          <label class="flex items-center gap-2 text-sm"><input v-model="form.parkour.beginnerFriendly" type="checkbox">{{ t('forms.beginnerFriendly') }}</label>
+        </UiSurface>
+        <UiActionButton type="submit" variant="primary" class="h-12 px-5" :disabled="submitting">
           {{ t('forms.submit') }}
-        </button>
+        </UiActionButton>
       </form>
     </UiGlassCard>
   </div>

@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
           favoriteCount: true,
           createdAt: true,
           tags: { select: { tag: { select: { name: true, slug: true } } } },
-          genjiPk: { select: { levelCount: true, timerSupported: true, beginnerFriendly: true } }
+          parkour: { select: { hero: true, levelCount: true, timerSupported: true, beginnerFriendly: true, difficultyStart: true } }
         }
       }
     }

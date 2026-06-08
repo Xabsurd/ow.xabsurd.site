@@ -25,6 +25,7 @@ const menuStyle = reactive({
   maxHeight: '18rem'
 })
 const selected = computed(() => props.options.find((item) => item.value === model.value))
+const triggerClass = controlTriggerClass
 
 function choose(value: string) {
   model.value = value
@@ -79,7 +80,7 @@ onBeforeUnmount(() => {
     <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ label }}</span>
     <button
       type="button"
-      class="focus-ring flex h-12 w-full items-center justify-between gap-3 rounded-xl border border-white/45 bg-white/35 px-4 text-left text-sm shadow-lg shadow-slate-950/5 backdrop-blur-xl transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15"
+      :class="triggerClass"
       :aria-expanded="open"
       @click="toggle"
     >

@@ -15,6 +15,7 @@ const draft = ref('')
 const open = ref(false)
 const tagList = computed(() => props.availableTags.length ? props.availableTags : [...workshopTags])
 const summary = computed(() => model.value.length ? model.value.join('、') : t('forms.chooseTags'))
+const triggerClass = controlTriggerClass
 
 function add() {
   const value = draft.value.trim()
@@ -49,7 +50,7 @@ function tagStyle(color: string, active: boolean) {
   <div>
     <button
       type="button"
-      class="focus-ring flex h-12 w-full items-center justify-between gap-3 rounded-xl border border-white/45 bg-white/35 px-4 text-left text-sm shadow-lg shadow-slate-950/5 backdrop-blur-xl transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15"
+      :class="triggerClass"
       @click="open = true"
     >
       <span class="min-w-0 truncate font-semibold">{{ summary }}</span>

@@ -11,7 +11,7 @@ type CodeCardItem = {
   favoriteCount: number
   createdAt: string
   tags?: { tag: { name: string; slug: string } }[]
-  genjiPk?: { levelCount?: number; timerSupported?: boolean; beginnerFriendly?: boolean } | null
+  parkour?: { hero?: string; levelCount?: number; timerSupported?: boolean; beginnerFriendly?: boolean; difficultyStart?: string | null } | null
 }
 
 defineProps<{ items: CodeCardItem[]; emptyTitle: string }>()

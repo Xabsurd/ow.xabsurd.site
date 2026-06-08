@@ -176,15 +176,17 @@ async function main() {
         data: {
           ...data,
           tags: { create: tagConnections },
-          genjiPk: {
+          parkour: {
             upsert: {
               create: {
+                hero: 'genji',
                 levelCount: Math.max(1, Number(item.checkpoints || 1)),
                 timerSupported: true,
                 beginnerFriendly: ['Easy-', 'Easy', 'Easy+', 'Medium-', 'Medium'].includes(difficulty),
                 notes: item.quality ? `quality: ${item.quality}` : null
               },
               update: {
+                hero: 'genji',
                 levelCount: Math.max(1, Number(item.checkpoints || 1)),
                 timerSupported: true,
                 beginnerFriendly: ['Easy-', 'Easy', 'Easy+', 'Medium-', 'Medium'].includes(difficulty),
@@ -200,8 +202,9 @@ async function main() {
         data: {
           ...data,
           tags: { create: tagConnections },
-          genjiPk: {
+          parkour: {
             create: {
+              hero: 'genji',
               levelCount: Math.max(1, Number(item.checkpoints || 1)),
               timerSupported: true,
               beginnerFriendly: ['Easy-', 'Easy', 'Easy+', 'Medium-', 'Medium'].includes(difficulty),

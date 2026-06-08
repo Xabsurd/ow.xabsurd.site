@@ -61,15 +61,14 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="root" class="relative" @keydown.esc="open = false">
-    <button
+    <UiActionButton
       type="button"
-      class="focus-ring h-10 rounded-xl border border-white/45 bg-white/35 px-3 text-sm font-semibold shadow-sm backdrop-blur transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15"
       aria-label="Language"
       :aria-expanded="open"
       @click="toggle"
     >
       {{ current?.name || locale }}
-    </button>
+    </UiActionButton>
     <Teleport to="body">
       <div v-if="open" ref="menu" class="locale-menu fixed z-[95] grid gap-1 rounded-2xl p-2" :style="menuStyle">
         <button

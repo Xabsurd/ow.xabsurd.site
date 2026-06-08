@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n()
+const { user, loaded, refresh } = useAuth()
 useSeoMeta({
   title: () => t('brand'),
   description: () => t('hero.description'),
@@ -13,6 +14,14 @@ const { data } = await useFetch('/api/codes', {
 
 const tags = ['源氏跑酷', '训练', 'PVE', '计时', '多人', '教学']
 const categories = ['娱乐', '竞技', '训练', '跑酷', 'PVE', '小游戏']
+const isGuest = computed(() => loaded.value && !user.value)
+const isMember = computed(() => loaded.value && user.value)
+
+onMounted(() => {
+  refresh().catch(() => undefined)
+})
+
+if (!loaded.value) await refresh().catch(() => undefined)
 </script>
 
 <template>
@@ -22,11 +31,13 @@ const categories = ['娱乐', '竞技', '训练', '跑酷', 'PVE', '小游戏']
         <p class="text-sm font-semibold uppercase tracking-wide text-cyan-600 dark:text-cyan-300">Overwatch Workshop</p>
         <h1 class="mt-4 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">{{ t('hero.title') }}</h1>
         <p class="mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">{{ t('hero.description') }}</p>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <NuxtLink to="/register" class="rounded-xl bg-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-600/20 dark:bg-cyan-400 dark:text-slate-950">{{ t('auth.register') }}</NuxtLink>
-          <NuxtLink to="/login" class="rounded-xl border border-slate-900/10 px-5 py-3 text-sm font-semibold dark:border-white/10">{{ t('auth.login') }}</NuxtLink>
-          <NuxtLink to="/codes" class="rounded-xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white dark:bg-white dark:text-slate-950">{{ t('nav.codes') }}</NuxtLink>
-          <NuxtLink to="/genji-pk" class="rounded-xl border border-slate-900/10 px-5 py-3 text-sm font-semibold dark:border-white/10">{{ t('nav.genjiPk') }}</NuxtLink>
+        <div class="mt-6 grid max-w-xl grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:gap-3">
+          <UiActionLink v-if="isGuest" to="/register" variant="hero" size="hero">{{ t('auth.register') }}</UiActionLink>
+          <UiActionLink v-if="isGuest" to="/login" variant="hero" size="hero">{{ t('auth.login') }}</UiActionLink>
+          <UiActionLink v-if="isMember" to="/upload" variant="hero" size="hero">{{ t('nav.upload') }}</UiActionLink>
+          <UiActionLink v-if="isMember" to="/me" variant="hero" size="hero" class="truncate">{{ user?.gameId }}</UiActionLink>
+          <UiActionLink to="/codes" variant="hero" size="hero">{{ t('nav.codes') }}</UiActionLink>
+          <UiActionLink to="/codes?type=跑酷&hero=genji" variant="hero" size="hero">{{ t('nav.genjiPk') }}</UiActionLink>
         </div>
       </div>
       <UiGlassCard>

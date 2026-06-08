@@ -26,8 +26,9 @@ export default defineEventHandler(async (event) => {
       status: 'PENDING',
       uploaderId: user.id,
       tags: { create: tagConnections },
-      genjiPk: {
+      parkour: {
         create: {
+          hero: 'genji',
           levelCount: data.levelCount,
           timerSupported: data.timerSupported,
           beginnerFriendly: data.beginnerFriendly,

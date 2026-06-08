@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const where: Prisma.WorkshopCodeWhereInput = {
     status: 'APPROVED',
     type: '跑酷',
-    genjiPk: { isNot: null },
+    parkour: { is: { hero: 'genji' } },
     difficulty: difficulty || undefined,
     mapName: mapName ? { contains: mapName, mode: 'insensitive' } : undefined,
     OR: keyword
@@ -57,11 +57,13 @@ export default defineEventHandler(async (event) => {
         favoriteCount: true,
         createdAt: true,
         tags: { select: { tag: { select: { name: true, slug: true } } } },
-        genjiPk: {
+        parkour: {
           select: {
+            hero: true,
             levelCount: true,
             timerSupported: true,
             beginnerFriendly: true,
+            difficultyStart: true,
             averageClearTime: true
           }
         }

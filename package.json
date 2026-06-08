@@ -16,6 +16,7 @@
     "db:seed:prod": "node prisma/seed.mjs",
     "cache:maps": "node scripts/cache-map-images.mjs",
     "import:genji": "tsx scripts/import-genji-maps.ts",
+    "import:ow62-genji": "tsx scripts/import-ow62-genji-maps.ts",
     "test": "vitest run",
     "deploy": "tsx scripts/deploy.ts"
   },

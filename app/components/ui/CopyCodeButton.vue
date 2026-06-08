@@ -11,7 +11,7 @@ async function copy() {
 </script>
 
 <template>
-  <button class="focus-ring rounded-lg border border-cyan-300/40 bg-cyan-300/18 px-3 py-2 text-sm font-semibold text-cyan-950 shadow-lg shadow-cyan-500/10 backdrop-blur transition hover:bg-cyan-300/28 dark:text-cyan-50" @click="copy">
+  <UiActionButton variant="primary" class="h-10 px-3" @click="copy">
     {{ copied ? t('ui.copied') : t('ui.copyCode') }}
-  </button>
+  </UiActionButton>
 </template>

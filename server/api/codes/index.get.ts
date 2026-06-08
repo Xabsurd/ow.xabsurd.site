@@ -10,16 +10,36 @@ export default defineEventHandler(async (event) => {
   if (!parsed.success) throw apiError(400, 'VALIDATION_ERROR', 'Invalid query', zodDetails(parsed.error))
 
   const { page, pageSize, keyword, sort, tags, ...filters } = parsed.data
+  const levelCount =
+    filters.levelMin || filters.levelMax
+      ? {
+          gte: filters.levelMin,
+          lte: filters.levelMax
+        }
+      : undefined
   const where: Prisma.WorkshopCodeWhereInput = {
     status: 'APPROVED',
     type: filters.type || undefined,
     difficulty: filters.difficulty || undefined,
     mapName: filters.mapName ? { contains: filters.mapName, mode: 'insensitive' } : undefined,
+    parkour:
+      filters.hero || filters.difficultyStart || levelCount || filters.timerSupported !== undefined || filters.beginnerFriendly !== undefined
+        ? {
+            is: {
+              hero: filters.hero || undefined,
+              difficultyStart: filters.difficultyStart || undefined,
+              levelCount,
+              timerSupported: filters.timerSupported,
+              beginnerFriendly: filters.beginnerFriendly
+            }
+          }
+        : undefined,
     OR: keyword
       ? [
           { title: { contains: keyword, mode: 'insensitive' } },
           { workshopCode: { contains: keyword, mode: 'insensitive' } },
-          { authorName: { contains: keyword, mode: 'insensitive' } }
+          { authorName: { contains: keyword, mode: 'insensitive' } },
+          { parkour: { is: { hero: { contains: keyword, mode: 'insensitive' } } } }
         ]
       : undefined,
     tags: tags
@@ -57,7 +77,7 @@ export default defineEventHandler(async (event) => {
         favoriteCount: true,
         createdAt: true,
         tags: { select: { tag: { select: { name: true, slug: true } } } },
-        genjiPk: { select: { levelCount: true, timerSupported: true, beginnerFriendly: true } }
+        parkour: { select: { hero: true, levelCount: true, timerSupported: true, beginnerFriendly: true, difficultyStart: true } }
       }
     }),
     prisma.workshopCode.count({ where })

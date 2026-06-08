@@ -17,6 +17,7 @@ const failedImages = ref<Set<string>>(new Set())
 const mapFetch = useFetch('/api/maps')
 const mapData = mapFetch.data
 const maps = computed(() => mapData.value?.maps || overwatchMaps)
+const triggerClass = controlTriggerClass
 
 const selectedMap = computed(() => maps.value.find((map) => map.name === props.modelValue || map.zhName === props.modelValue || map.slug === props.modelValue))
 const selectedLabel = computed(() => selectedMap.value ? localizedMapName(selectedMap.value, locale.value) : '')
@@ -59,7 +60,7 @@ await mapFetch
     <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ $t('forms.mapName') }}</span>
     <button
       type="button"
-      class="focus-ring flex h-12 w-full items-center justify-between gap-3 rounded-xl border border-white/45 bg-white/35 px-4 text-left text-sm shadow-lg shadow-slate-950/5 backdrop-blur-xl transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15"
+      :class="triggerClass"
       @click="open = true"
     >
       <span class="min-w-0 truncate font-semibold">{{ selectedLabel || (props.allowEmpty ? props.emptyLabel || $t('filters.allMaps') : $t('forms.chooseMap')) }}</span>

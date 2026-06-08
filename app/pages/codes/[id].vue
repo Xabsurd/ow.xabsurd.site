@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { findOverwatchMap, localizedCodeType, localizedMapMode, localizedMapName } from '~/utils/catalog'
+import { findOverwatchMap, localizedCodeType, localizedMapMode, localizedMapName, parkourHeroLabel } from '~/utils/catalog'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -27,10 +27,12 @@ type CodeDetail = {
     createdAt: string
     uploader: { id: string; gameId: string }
     tags: { tag: { name: string; slug: string } }[]
-    genjiPk?: {
+    parkour?: {
+      hero: string
       levelCount: number
       timerSupported: boolean
       beginnerFriendly: boolean
+      difficultyStart?: string | null
       averageClearTime?: string | null
     } | null
   }
@@ -43,7 +45,8 @@ const mapImageFailed = ref(false)
 const mapLabel = computed(() => map.value ? localizedMapName(map.value, locale.value) : data.value?.code.mapName || '')
 const mapModeLabel = computed(() => map.value ? localizedMapMode(map.value, locale.value) : data.value?.code.region || 'Workshop')
 const typeLabel = computed(() => localizedCodeType(data.value?.code.type, locale.value))
-const levelLabel = computed(() => t('ui.levels', { count: data.value?.code.genjiPk?.levelCount || 0 }))
+const levelLabel = computed(() => t('ui.levels', { count: data.value?.code.parkour?.levelCount || 0 }))
+const heroLabel = computed(() => parkourHeroLabel(data.value?.code.parkour?.hero))
 const sameMapQuery = computed(() => ({ path: '/codes', query: { mapName: data.value?.code.mapName || '' } }))
 const favoriteBusy = ref(false)
 const reportOpen = ref(false)
@@ -145,7 +148,8 @@ async function submitReport() {
             <div class="mb-3 flex flex-wrap gap-2">
               <UiDifficultyBadge :value="data.code.difficulty" />
               <UiTagPill :label="typeLabel" />
-              <UiTagPill v-if="data.code.genjiPk" :label="levelLabel" />
+              <UiTagPill v-if="heroLabel" :label="heroLabel" />
+              <UiTagPill v-if="data.code.parkour" :label="levelLabel" />
             </div>
             <h1 class="max-w-3xl text-3xl font-semibold leading-tight sm:text-4xl">{{ data.code.title }}</h1>
             <p class="mt-2 text-sm text-white/75">{{ data.code.authorName || data.code.uploader.gameId }} · {{ mapLabel }}</p>
@@ -216,13 +220,15 @@ async function submitReport() {
       </div>
 
       <aside class="space-y-5">
-        <div v-if="data.code.genjiPk" class="rounded-2xl border border-white/45 bg-white/40 p-5 shadow-xl shadow-slate-950/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/10">
-          <h2 class="mb-4 text-lg font-semibold">{{ t('nav.genjiPk') }}</h2>
+        <div v-if="data.code.parkour" class="rounded-2xl border border-white/45 bg-white/40 p-5 shadow-xl shadow-slate-950/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/10">
+          <h2 class="mb-4 text-lg font-semibold">跑酷信息</h2>
           <div class="grid gap-3">
-            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.levelCount') }}</span><b>{{ data.code.genjiPk.levelCount }}</b></div>
-            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.timerSupported') }}</span><b>{{ data.code.genjiPk.timerSupported ? 'Yes' : 'No' }}</b></div>
-            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.beginnerFriendly') }}</span><b>{{ data.code.genjiPk.beginnerFriendly ? 'Yes' : 'No' }}</b></div>
-            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.averageClearTime') }}</span><b>{{ data.code.genjiPk.averageClearTime || '-' }}</b></div>
+            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>角色</span><b>{{ heroLabel || '-' }}</b></div>
+            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.levelCount') }}</span><b>{{ data.code.parkour.levelCount }}</b></div>
+            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>起始难度</span><b>{{ data.code.parkour.difficultyStart || '-' }}</b></div>
+            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.timerSupported') }}</span><b>{{ data.code.parkour.timerSupported ? 'Yes' : 'No' }}</b></div>
+            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.beginnerFriendly') }}</span><b>{{ data.code.parkour.beginnerFriendly ? 'Yes' : 'No' }}</b></div>
+            <div class="flex items-center justify-between rounded-xl bg-white/35 p-3 dark:bg-white/10"><span>{{ t('forms.averageClearTime') }}</span><b>{{ data.code.parkour.averageClearTime || '-' }}</b></div>
           </div>
         </div>
 

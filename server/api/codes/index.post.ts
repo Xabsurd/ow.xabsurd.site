@@ -12,14 +12,29 @@ export default defineEventHandler(async (event) => {
   const parsed = createCodeSchema.safeParse(await readBody(event))
   if (!parsed.success) throw apiError(400, 'VALIDATION_ERROR', 'Invalid code payload', zodDetails(parsed.error))
 
-  const tagConnections = await connectTags(parsed.data.tags)
+  const { parkour, ...codeData } = parsed.data
+  const tagConnections = await connectTags(codeData.tags)
   const code = await prisma.workshopCode.create({
     data: {
-      ...parsed.data,
-      authorName: parsed.data.authorName || user.gameId,
+      ...codeData,
+      authorName: codeData.authorName || user.gameId,
       status: 'PENDING',
       uploaderId: user.id,
-      tags: { create: tagConnections }
+      tags: { create: tagConnections },
+      parkour:
+        codeData.type === '跑酷'
+          ? {
+              create: {
+                hero: parkour?.hero || 'genji',
+                levelCount: parkour?.levelCount || 1,
+                difficultyStart: parkour?.difficultyStart || null,
+                timerSupported: parkour?.timerSupported || false,
+                beginnerFriendly: parkour?.beginnerFriendly || false,
+                averageClearTime: parkour?.averageClearTime || null,
+                notes: parkour?.notes || null
+              }
+            }
+          : undefined
     },
     select: { id: true, status: true }
   })

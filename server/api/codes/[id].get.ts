@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     include: {
       uploader: { select: { id: true, gameId: true } },
       tags: { select: { tag: { select: { name: true, slug: true } } } },
-      genjiPk: true
+      parkour: true
     }
   })
   if (!code) throw apiError(404, 'NOT_FOUND', 'Code not found')

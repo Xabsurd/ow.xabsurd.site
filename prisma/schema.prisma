@@ -103,6 +103,7 @@ model WorkshopCode {
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
   genjiPk        GenjiPkCode?
+  parkour        ParkourCode?
   tags           WorkshopCodeTag[]
   favorites      Favorite[]
   reports        Report[]
@@ -128,6 +129,29 @@ model GenjiPkCode {
   updatedAt         DateTime     @updatedAt
 
   @@index([levelCount])
+}
+
+model ParkourCode {
+  id                String       @id @default(cuid())
+  workshopCodeId    String       @unique
+  workshopCode      WorkshopCode @relation(fields: [workshopCodeId], references: [id], onDelete: Cascade)
+  hero              String
+  levelCount        Int
+  difficultyStart   String?
+  timerSupported    Boolean      @default(false)
+  beginnerFriendly  Boolean      @default(false)
+  averageClearTime  String?
+  source            String?
+  sourceId          String?
+  notes             String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@index([hero])
+  @@index([levelCount])
+  @@index([difficultyStart])
+  @@index([source])
+  @@unique([source, sourceId])
 }
 
 model Tag {

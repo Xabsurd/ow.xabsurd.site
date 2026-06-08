@@ -18,6 +18,7 @@ const form = reactive({
   notes: ''
 })
 const submitting = ref(false)
+const levelInputClass = controlClasses()
 
 watch(
   () => form.workshopCode,
@@ -66,7 +67,7 @@ async function submit() {
           <FormMapPicker v-model="form.mapName" />
           <label>
             <span class="text-sm font-medium">{{ t('forms.levelCount') }}</span>
-            <input v-model.number="form.levelCount" type="number" min="1" class="mt-1 h-12 w-full rounded-xl border border-white/45 bg-white/35 px-3 text-sm shadow-lg shadow-slate-950/5 backdrop-blur-xl transition hover:bg-white/55 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/15" >
+            <input v-model.number="form.levelCount" type="number" min="1" :class="['mt-1 w-full', levelInputClass]" >
           </label>
           <FormDifficultyPicker v-model="form.difficulty" />
         </div>
@@ -78,12 +79,9 @@ async function submit() {
         </div>
         <FormInput v-model="form.averageClearTime" :label="t('forms.averageClearTime')" />
         <FormTextarea v-model="form.notes" :label="t('forms.notes')" :rows="3" />
-        <button
-          class="h-12 rounded-xl border border-cyan-300/40 bg-cyan-300/18 px-5 text-sm font-semibold text-cyan-950 shadow-lg shadow-cyan-500/10 backdrop-blur-xl transition hover:bg-cyan-300/28 disabled:cursor-not-allowed disabled:opacity-60 dark:text-cyan-50"
-          :disabled="submitting"
-        >
+        <UiActionButton type="submit" variant="primary" class="h-12 px-5" :disabled="submitting">
           {{ t('forms.submit') }}
-        </button>
+        </UiActionButton>
       </form>
     </UiGlassCard>
   </div>

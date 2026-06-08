@@ -77,16 +77,17 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="root" class="relative" @keydown.esc="open = false">
-    <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ label }}</span>
-    <button
-      type="button"
-      :class="triggerClass"
-      :aria-expanded="open"
-      @click="toggle"
-    >
-      <span class="min-w-0 truncate font-semibold">{{ selected?.label || placeholder }}</span>
-      <Icon icon="lucide:chevron-down" class="h-4 w-4 shrink-0 text-slate-500 transition dark:text-slate-300" :class="open ? 'rotate-180' : ''" />
-    </button>
+    <FormField :label="label">
+      <button
+        type="button"
+        :class="triggerClass"
+        :aria-expanded="open"
+        @click="toggle"
+      >
+        <span class="min-w-0 truncate font-semibold">{{ selected?.label || placeholder }}</span>
+        <Icon icon="lucide:chevron-down" class="h-4 w-4 shrink-0 text-slate-500 transition dark:text-slate-300" :class="open ? 'rotate-180' : ''" />
+      </button>
+    </FormField>
 
     <Teleport to="body">
       <div v-if="open" ref="menu" class="select-picker-menu fixed z-[90] overflow-y-auto rounded-2xl py-2" :style="menuStyle">

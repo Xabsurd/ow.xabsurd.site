@@ -3,6 +3,17 @@ export default defineNuxtConfig({
   srcDir: 'app',
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', '@nuxtjs/i18n', '@nuxt/eslint'],
   devtools: { enabled: true },
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'shortcut icon', href: '/favicon.svg' }
+      ],
+      meta: [
+        { name: 'theme-color', content: '#061018' }
+      ]
+    }
+  },
   css: ['~/assets/css/main.css'],
   colorMode: {
     classSuffix: '',

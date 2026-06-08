@@ -104,7 +104,8 @@
     "reportDetailPlaceholder": "Optional, add more context for moderators",
     "submitReport": "Submit report",
     "reportSent": "Report submitted. Thanks for the feedback.",
-    "empty": "No content yet"
+    "empty": "No content yet",
+    "noDescription": "No description yet."
   },
   "validation": {
     "workshopCodeRequired": "Please enter a valid workshop code.",

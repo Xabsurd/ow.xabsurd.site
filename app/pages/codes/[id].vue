@@ -159,7 +159,7 @@ async function submitReport() {
           <div class="rounded-2xl border border-white/45 bg-white/45 p-4 shadow-lg shadow-slate-950/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/10">
             <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">{{ t('forms.workshopCode') }}</span>
             <div class="mt-2 flex items-center gap-2">
-              <code class="min-w-0 flex-1 rounded-xl bg-slate-950 px-4 py-3 text-center text-2xl font-black tracking-wide text-white dark:bg-white dark:text-slate-950">{{ data.code.workshopCode }}</code>
+              <code class="min-w-0 flex-1 rounded-xl bg-slate-950 px-4 py-2 text-center text-2xl font-black tracking-wide text-white dark:bg-white dark:text-slate-950">{{ data.code.workshopCode }}</code>
               <UiCopyCodeButton :code="data.code.workshopCode" />
             </div>
           </div>
@@ -216,7 +216,7 @@ async function submitReport() {
     <section class="grid gap-5 lg:grid-cols-[1fr_22rem]">
       <div class="rounded-2xl border border-white/45 bg-white/40 p-5 shadow-xl shadow-slate-950/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/10">
         <h2 class="mb-4 text-xl font-semibold">{{ t('forms.description') }}</h2>
-        <MarkdownRenderer :html="data.code.htmlDescription" />
+        <CodeMarkdownRenderer :html="data.code.htmlDescription" />
       </div>
 
       <aside class="space-y-5">

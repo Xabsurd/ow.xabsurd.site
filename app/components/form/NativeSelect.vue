@@ -15,8 +15,7 @@ const selectClass = controlClasses({ select: true })
 </script>
 
 <template>
-  <label class="block">
-    <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ label }}</span>
+  <FormField :label="label">
     <span class="relative block">
       <select
         v-model="model"
@@ -28,5 +27,5 @@ const selectClass = controlClasses({ select: true })
       </select>
       <Icon icon="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 dark:text-slate-300" />
     </span>
-  </label>
+  </FormField>
 </template>

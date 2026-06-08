@@ -39,6 +39,12 @@ export const createCodeSchema = z.object({
     .optional()
 })
 
+export const updateCodeSchema = createCodeSchema.partial().extend({
+  tags: tagsSchema.optional(),
+  status: z.enum(['PENDING', 'APPROVED', 'REJECTED', 'HIDDEN', 'DELETED']).optional(),
+  reviewNote: z.string().trim().max(500).optional().nullable()
+})
+
 export const codeQuerySchema = z.object({
   keyword: z.string().trim().max(80).optional(),
   type: z.string().trim().max(32).optional(),

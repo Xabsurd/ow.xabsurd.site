@@ -2,9 +2,10 @@
 import { Icon } from '@iconify/vue'
 import { difficultyOptions, legacyDifficultyOptions } from '~/utils/catalog'
 
-const props = withDefaults(defineProps<{ allowEmpty?: boolean; emptyLabel?: string }>(), {
+const props = withDefaults(defineProps<{ allowEmpty?: boolean; emptyLabel?: string; label?: string }>(), {
   allowEmpty: false,
-  emptyLabel: ''
+  emptyLabel: '',
+  label: ''
 })
 const model = defineModel<string>({ default: '' })
 const open = ref(false)
@@ -25,15 +26,16 @@ function clear() {
 
 <template>
   <div>
-    <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ $t('forms.difficulty') }}</span>
-    <button
-      type="button"
-      :class="triggerClass"
-      @click="open = true"
-    >
-      <span class="min-w-0 truncate font-semibold">{{ selected?.label || model || (props.allowEmpty ? props.emptyLabel || $t('filters.allDifficulties') : $t('forms.chooseDifficulty')) }}</span>
-      <Icon icon="lucide:chevron-down" class="h-4 w-4 shrink-0 text-slate-500 dark:text-slate-300" />
-    </button>
+    <FormField :label="props.label || $t('forms.difficulty')">
+      <button
+        type="button"
+        :class="triggerClass"
+        @click="open = true"
+      >
+        <span class="min-w-0 truncate font-semibold">{{ selected?.label || model || (props.allowEmpty ? props.emptyLabel || $t('filters.allDifficulties') : $t('forms.chooseDifficulty')) }}</span>
+        <Icon icon="lucide:chevron-down" class="h-4 w-4 shrink-0 text-slate-500 dark:text-slate-300" />
+      </button>
+    </FormField>
 
     <Teleport to="body">
       <div v-if="open" class="modal-scrim fixed inset-0 z-50 grid place-items-center p-3 sm:p-6" @keydown.esc="open = false" @click.self="open = false">

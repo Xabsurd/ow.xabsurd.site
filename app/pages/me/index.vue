@@ -7,7 +7,7 @@ const data = statsFetch.data
 
 const actions = computed(() => [
   { to: '/upload', title: t('profile.uploadCode'), description: t('profile.uploadCodeHint') },
-  { to: '/genji-pk/upload', title: t('profile.uploadGenji'), description: t('profile.uploadGenjiHint') },
+  { to: '/upload?type=跑酷&hero=genji', title: t('profile.uploadGenji'), description: t('profile.uploadGenjiHint') },
   { to: '/me/uploads', title: t('pages.myUploads'), description: t('profile.uploadsHint') },
   { to: '/me/favorites', title: t('pages.favorites'), description: t('profile.favoritesHint') }
 ])

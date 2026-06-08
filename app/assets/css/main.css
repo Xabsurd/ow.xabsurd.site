@@ -256,14 +256,102 @@ select {
   background-clip: content-box;
 }
 
-.prose-safe :where(h1, h2, h3) {
-  @apply mt-5 font-semibold;
+.prose-safe {
+  @apply min-w-0 break-words text-sm leading-7 text-slate-700 dark:text-slate-200;
 }
 
-.prose-safe :where(p, ul, ol) {
-  @apply my-3 text-sm leading-7 text-slate-700 dark:text-slate-200;
+.prose-safe > :first-child {
+  @apply mt-0;
 }
 
-.prose-safe a {
-  @apply text-cyan-600 underline dark:text-cyan-300;
+.prose-safe > :last-child {
+  @apply mb-0;
+}
+
+.prose-safe :where(h1) {
+  @apply mb-4 mt-7 text-2xl font-black leading-tight text-slate-800 dark:text-slate-50;
+}
+
+.prose-safe :where(h2) {
+  @apply mb-3 mt-6 text-xl font-bold leading-tight text-slate-800 dark:text-slate-50;
+}
+
+.prose-safe :where(h3) {
+  @apply mb-2 mt-5 text-lg font-bold leading-tight text-slate-800 dark:text-slate-100;
+}
+
+.prose-safe :where(h4, h5, h6) {
+  @apply mb-2 mt-4 font-bold text-slate-800 dark:text-slate-100;
+}
+
+.prose-safe :where(p) {
+  @apply my-3;
+}
+
+.prose-safe :where(ul) {
+  @apply my-3 list-disc space-y-1 pl-6;
+}
+
+.prose-safe :where(ol) {
+  @apply my-3 list-decimal space-y-1 pl-6;
+}
+
+.prose-safe :where(li) {
+  @apply pl-1;
+}
+
+.prose-safe :where(li)::marker {
+  @apply text-cyan-600 dark:text-cyan-300;
+}
+
+.prose-safe :where(li > p) {
+  @apply my-1;
+}
+
+.prose-safe :where(a) {
+  @apply font-semibold text-cyan-700 underline underline-offset-4 transition hover:text-cyan-600 dark:text-cyan-300 dark:hover:text-cyan-200;
+}
+
+.prose-safe :where(strong) {
+  @apply font-bold text-slate-900 dark:text-white;
+}
+
+.prose-safe :where(em) {
+  @apply text-slate-700 dark:text-slate-200;
+}
+
+.prose-safe :where(code) {
+  @apply rounded-md border border-cyan-500/20 bg-cyan-500/10 px-1.5 py-0.5 font-mono text-[0.88em] font-semibold text-cyan-800 dark:border-cyan-300/20 dark:bg-cyan-300/10 dark:text-cyan-100;
+}
+
+.prose-safe :where(pre) {
+  @apply my-4 overflow-x-auto rounded-xl border border-slate-900/10 bg-slate-950 p-4 text-slate-100 shadow-inner dark:border-white/10;
+}
+
+.prose-safe :where(pre code) {
+  @apply border-0 bg-transparent p-0 text-sm font-medium text-inherit;
+}
+
+.prose-safe :where(blockquote) {
+  @apply my-4 border-l-4 border-cyan-500/45 bg-cyan-500/10 py-2 pl-4 pr-3 italic text-slate-700 dark:text-slate-200;
+}
+
+.prose-safe :where(hr) {
+  @apply my-6 border-slate-900/10 dark:border-white/10;
+}
+
+.prose-safe :where(img) {
+  @apply my-4 max-w-full rounded-xl border border-slate-900/10 dark:border-white/10;
+}
+
+.prose-safe :where(table) {
+  @apply my-4 w-full border-collapse overflow-hidden text-left text-sm;
+}
+
+.prose-safe :where(th, td) {
+  @apply border border-slate-900/10 px-3 py-2 align-top dark:border-white/10;
+}
+
+.prose-safe :where(th) {
+  @apply bg-slate-900/5 font-bold text-slate-800 dark:bg-white/10 dark:text-slate-100;
 }

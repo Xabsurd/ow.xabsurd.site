@@ -104,7 +104,8 @@
     "reportDetailPlaceholder": "可选，写下更多处理线索",
     "submitReport": "提交举报",
     "reportSent": "举报已提交，感谢反馈。",
-    "empty": "暂无内容"
+    "empty": "暂无内容",
+    "noDescription": "暂无说明，等待上传者补充。"
   },
   "validation": {
     "workshopCodeRequired": "请填写有效的工坊代码。",

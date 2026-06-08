@@ -10,11 +10,20 @@ export default defineEventHandler(async (event) => {
       id: true,
       workshopCode: true,
       title: true,
+      description: true,
       type: true,
       difficulty: true,
+      mapName: true,
+      authorName: true,
+      version: true,
+      region: true,
+      playerCount: true,
+      language: true,
       status: true,
       reviewNote: true,
-      createdAt: true
+      createdAt: true,
+      parkour: true,
+      tags: { select: { tag: { select: { name: true, slug: true } } } }
     }
   })
   return { items }

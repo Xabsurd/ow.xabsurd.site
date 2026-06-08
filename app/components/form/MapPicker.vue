@@ -2,11 +2,12 @@
 import { Icon } from '@iconify/vue'
 import { localizedMapMode, localizedMapName, mapSearchTerms, overwatchMaps } from '~/utils/catalog'
 
-const props = withDefaults(defineProps<{ modelValue?: string; required?: boolean; allowEmpty?: boolean; emptyLabel?: string }>(), {
+const props = withDefaults(defineProps<{ modelValue?: string; required?: boolean; allowEmpty?: boolean; emptyLabel?: string; label?: string }>(), {
   modelValue: '',
   required: false,
   allowEmpty: false,
-  emptyLabel: ''
+  emptyLabel: '',
+  label: ''
 })
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 const open = ref(false)
@@ -57,15 +58,16 @@ await mapFetch
 
 <template>
   <div>
-    <span class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ $t('forms.mapName') }}</span>
-    <button
-      type="button"
-      :class="triggerClass"
-      @click="open = true"
-    >
-      <span class="min-w-0 truncate font-semibold">{{ selectedLabel || (props.allowEmpty ? props.emptyLabel || $t('filters.allMaps') : $t('forms.chooseMap')) }}</span>
-      <Icon icon="lucide:chevron-down" class="h-4 w-4 shrink-0 text-slate-500 dark:text-slate-300" />
-    </button>
+    <FormField :label="props.label || $t('forms.mapName')" :required="required">
+      <button
+        type="button"
+        :class="triggerClass"
+        @click="open = true"
+      >
+        <span class="min-w-0 truncate font-semibold">{{ selectedLabel || (props.allowEmpty ? props.emptyLabel || $t('filters.allMaps') : $t('forms.chooseMap')) }}</span>
+        <Icon icon="lucide:chevron-down" class="h-4 w-4 shrink-0 text-slate-500 dark:text-slate-300" />
+      </button>
+    </FormField>
 
     <Teleport to="body">
       <div v-if="open" class="modal-scrim fixed inset-0 z-[80] grid place-items-center p-3 sm:p-6" @keydown.esc="open = false" @click.self="open = false">

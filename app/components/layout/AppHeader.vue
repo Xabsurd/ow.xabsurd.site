@@ -35,7 +35,9 @@ function isActive(to: string) {
   <header class="sticky top-0 z-30 border-b border-white/45 bg-white/72 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/72">
     <div class="mx-auto flex max-w-7xl items-center gap-1.5 px-3 py-3 min-[375px]:gap-2 min-[375px]:px-4 sm:gap-3 sm:px-6 lg:px-8">
       <NuxtLink to="/" class="mr-1 flex min-w-0 items-center gap-2 font-semibold sm:mr-2">
-        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-cyan-500/35 bg-cyan-500/10 text-sm text-cyan-950 backdrop-blur dark:border-cyan-300/25 dark:bg-cyan-300/10 dark:text-cyan-50">OW</span>
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-cyan-500/25 bg-white/85 p-1.5 shadow-sm dark:border-cyan-300/20 dark:bg-white/90" aria-hidden="true">
+          <img src="/brand/overwatch.svg" alt="" class="h-full w-full object-contain">
+        </span>
         <span class="max-w-20 truncate min-[480px]:max-w-32 sm:max-w-none">{{ t('brand') }}</span>
       </NuxtLink>
       <nav class="hidden flex-1 items-center gap-1 md:flex">

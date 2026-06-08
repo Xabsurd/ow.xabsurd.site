@@ -22,6 +22,7 @@ export default defineEventHandler(async (event) => {
     take: 50,
     include: {
       uploader: { select: { gameId: true } },
+      parkour: true,
       tags: { select: { tag: { select: { name: true, slug: true } } } }
     }
   })
